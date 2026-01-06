@@ -11,7 +11,7 @@ const VERIFY_TOKEN = "dragon_token";
 
 const PHONE_NUMBER_ID = "951797514685457"; // Your WhatsApp Business number ID
 const ACCESS_TOKEN =
-  "EAAKFsvJG4GUBQN7E2g3d61Ub26uSqFmUiZC7EUeRAESncqs1qelpadwnsxw1fFJ6JJKP2HjoLPv2lKhiPKpqHXgtIjntYUoAgh2ow2uBZAeeOzWE68Qd9ONJ7TDUIOnE4fOE2VZBnwZAbP5REEfG02OUtqamfYBxilyF8WMPC5lFieS9XHZBHcEZCuL2cOApvZCIQZDZD"; // Permanent Meta token
+  "EAAKFsvJG4GUBQcXzYZBA3Up7e1P3adE192rWv4ZAtA4X1qtHtZBzM7jHymjZC7ooU24DWgm4zaA713XuhKJ5a91VzoLOIh41K3pccZCDbXT793c8D44h5wZC9r4X2ZAnOxJ9Mu0y6zhYuTo3ZAOguzvJJVHIsz7usphGSeZAd9wtcRBDwvLQQUb9JuDidRIKIevtW1AZDZD"; // Permanent Meta token
 // ----------------------------------------------------
 
 // 1️⃣ Verify webhook (Meta callback verification)
