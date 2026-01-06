@@ -6,7 +6,7 @@ app.use(express.json());
 
 // ---------------------- CONFIG ----------------------
 const N8N_URL =
-  "https://n8n-production-cebd.up.railway.app/webhook/ultimate-notion-control";
+  "https://n8n-production-cebd.up.railway.app/webhook-test/ultimate-notion-control";
 const VERIFY_TOKEN = "dragon_token";
 
 const PHONE_NUMBER_ID = "951797514685457"; // Your WhatsApp Business number ID
