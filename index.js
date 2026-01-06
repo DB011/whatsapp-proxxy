@@ -7,7 +7,7 @@ app.use(express.json());
 // ---------------------- CONFIG ----------------------
 // FIX 1: Changed 'webhook-test' to 'webhook' (Production URL)
 // ⚠️ IMPORTANT: You must go to n8n and toggle your workflow to "Active" (Green)
-const N8N_URL = "https://n8n-production-cebd.up.railway.app/webhook/ultimate-notion-control";
+const N8N_URL = "https://n8n-production-cebd.up.railway.app/webhook-test/ultimate-notion-control";
 
 const VERIFY_TOKEN = "dragon_token";
 const PHONE_NUMBER_ID = "951797514685457"; 
