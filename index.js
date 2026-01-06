@@ -5,13 +5,13 @@ const app = express();
 app.use(express.json());
 
 // ---------------------- CONFIG ----------------------
-// FIX 1: Changed 'webhook-test' to 'webhook' (Production URL)
-// ⚠️ IMPORTANT: You must go to n8n and toggle your workflow to "Active" (Green)
-const N8N_URL = "https://n8n-production-cebd.up.railway.app/webhook-test/ultimate-notion-control";
-
+const N8N_URL =
+  "https://n8n-production-cebd.up.railway.app/webhook/ultimate-notion-control";
 const VERIFY_TOKEN = "dragon_token";
-const PHONE_NUMBER_ID = "951797514685457"; 
-const ACCESS_TOKEN = "EAAKFsvJG4GUBQN7E2g3d61Ub26uSqFmUiZC7EUeRAESncqs1qelpadwnsxw1fFJ6JJKP2HjoLPv2lKhiPKpqHXgtIjntYUoAgh2ow2uBZAeeOzWE68Qd9ONJ7TDUIOnE4fOE2VZBnwZAbP5REEfG02OUtqamfYBxilyF8WMPC5lFieS9XHZBHcEZCuL2cOApvZCIQZDZD"; 
+
+const PHONE_NUMBER_ID = "951797514685457"; // Your WhatsApp Business number ID
+const ACCESS_TOKEN =
+  "EAAKFsvJG4GUBQN7E2g3d61Ub26uSqFmUiZC7EUeRAESncqs1qelpadwnsxw1fFJ6JJKP2HjoLPv2lKhiPKpqHXgtIjntYUoAgh2ow2uBZAeeOzWE68Qd9ONJ7TDUIOnE4fOE2VZBnwZAbP5REEfG02OUtqamfYBxilyF8WMPC5lFieS9XHZBHcEZCuL2cOApvZCIQZDZD"; // Permanent Meta token
 // ----------------------------------------------------
 
 // 1️⃣ Verify webhook (Meta callback verification)
@@ -21,7 +21,7 @@ app.get("/webhook", (req, res) => {
   const challenge = req.query["hub.challenge"];
 
   if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("✅ Webhook verified successfully");
+    console.log("Webhook verified");
     return res.status(200).send(challenge);
   }
 
@@ -30,34 +30,20 @@ app.get("/webhook", (req, res) => {
 
 // 2️⃣ Forward only real WhatsApp messages to n8n
 app.post("/webhook", async (req, res) => {
-  // FIX 2: Reply to Meta INSTANTLY. 
-  // This prevents the "3-second timeout" error that disables your webhook.
-  res.sendStatus(200);
-
-  // Debug Log: Prove the request arrived
-  console.log("🔔 Incoming Webhook from Meta");
-
   const changes = req.body.entry?.[0]?.changes?.[0]?.value;
 
-  // Filter out status updates (sent/delivered/read) and non-messages
   if (!changes || !changes.messages || changes.messages.length === 0) {
-    // It's likely just a status update (like 'message delivered'), ignore it silently
-    return;
+    // Not a real WhatsApp message, ignore
+    console.log("Ignored non-message payload");
+    return res.sendStatus(200);
   }
 
   try {
-    console.log("Forwarding message to n8n...");
-    
-    // We do NOT use 'await' here because we don't want to block the server logic
-    // We fire and forget to n8n
-    axios.post(N8N_URL, req.body).then(() => {
-        console.log("-> Successfully sent to n8n");
-    }).catch((err) => {
-        console.log("! Error sending to n8n:", err.message);
-    });
-
+    await axios.post(N8N_URL, req.body);
+    res.sendStatus(200);
   } catch (err) {
-    console.log("Processing error:", err.message);
+    console.log("Forwarding to n8n failed:", err.message);
+    res.sendStatus(500);
   }
 });
 
@@ -90,7 +76,7 @@ app.post("/send", async (req, res) => {
   }
 });
 
-// 4️⃣ Ping endpoint to keep Replit/Railway awake
+// 4️⃣ Ping endpoint to keep Replit awake
 app.get("/ping", (req, res) => {
   res.send("ok");
 });
@@ -98,3 +84,4 @@ app.get("/ping", (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Proxy running on port " + PORT));
+
